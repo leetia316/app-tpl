@@ -1,13 +1,12 @@
 /**
- * Created by zyj on 2016/8/18.
+ * Created by zhouyongjia on 2016/8/18.
  */
 
 var webpack = require('webpack');
 var path = require('path');
 var autoprefixer = require('autoprefixer');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var OpenBrowserPlugin = require('open-browser-webpack-plugin');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 
 // 定义了一些文件夹的路径
@@ -59,11 +58,6 @@ module.exports = {
     // 添加各种插件
     plugins: [
 
-        // 是否启用调试模式，输出调试信息
-        new webpack.DefinePlugin({
-            DEBUG: process.env.NODE_ENV !== 'production'
-        }),
-
         // 设置全局变量，不用重复引入jQuery
         new webpack.ProvidePlugin({
             $: "jquery",
@@ -79,28 +73,15 @@ module.exports = {
 
         // 压缩混淆文件
         new webpack.optimize.UglifyJsPlugin({
+            compress: {warnings: false},
             sourceMap: false,
-            mangle: false
+            mangle: true
         }),
 
         // 自动生成HTML入口文件，index.html为模板文件
         new HtmlWebpackPlugin({
             template: path.join(SRC_PATH, 'index.html')
-        }),
+        })
 
-        // 自动打开浏览器窗口
-        new OpenBrowserPlugin({url: 'http://localhost:8080'})
-
-    ],
-
-    // 开发用的简易服务器
-    devServer: {
-        historyApiFallback: true,
-        hot: true,
-        inline: true,
-        progress: true,
-    },
-
-    // 开发工具,出错之后可以快速定位
-    devtool: 'eval-source-map'
+    ]
 };
